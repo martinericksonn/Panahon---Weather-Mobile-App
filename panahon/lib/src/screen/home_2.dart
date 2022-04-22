@@ -1,15 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+class Home2 extends StatefulWidget {
+  Home2({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home2> createState() => _Home2State();
 }
 
-class _HomeState extends State<Home> {
+class _Home2State extends State<Home2> {
   late AssetImage bkgImage;
   late ScrollController _scrollController;
   @override
@@ -51,53 +51,35 @@ class _HomeState extends State<Home> {
             alignment: Alignment.centerLeft,
           ),
           Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {},
+                ),
+              ],
+              // pinned: _pinned,
+              // snap: _snap,
+              // floating: _floating,
+              // expandedHeight: 160,
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              title: Text('Panahon'),
+              // flexibleSpace: FlexibleSpaceBar(
+              //   titlePadding: EdgeInsets.all(18),
+              // ),
+            ),
             backgroundColor: Colors.transparent,
-            body: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  actions: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {},
-                    ),
-                  ],
-                  pinned: _pinned,
-                  snap: _snap,
-                  floating: _floating,
-                  expandedHeight: 160,
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    expandedTitleScale: 1.6,
-                    titlePadding: EdgeInsets.all(18),
-                    title: Text('Panahon'),
+            body: SingleChildScrollView(
+              child: SizedBox(
+                height: 1000,
+                child: Card(
+                  child: SizedBox(
+                    width: double.infinity,
+                    // child: Text("test"),
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    SizedBox(
-                      height: 200,
-                      child: Card(),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: Card(),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: Card(),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: Card(),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: Card(),
-                    ),
-                  ]),
-                )
-              ],
+              ),
             ),
           ),
         ],
