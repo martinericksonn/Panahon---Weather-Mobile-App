@@ -10,14 +10,14 @@ class MyApp extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  var theme = ThemeSelector();
+  var themeController = ThemeController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
-      theme: theme.themeSelector(context),
+      home: Home(themeController),
+      theme: themeController.themeSelector(context),
     );
   }
 }
