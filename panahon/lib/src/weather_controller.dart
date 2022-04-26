@@ -79,4 +79,10 @@ class WeatherController {
             .format(DateTime.fromMillisecondsSinceEpoch(timesamp * 1000))
             .toString();
   }
+
+  String dateFormatTimeOfDay(int timesamp) {
+    return DateFormat('hh:mm aaa').format(
+      DateTime.fromMillisecondsSinceEpoch(timesamp * 1000),
+    );
+  }
 }

@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+import '../../weather_controller.dart';
+
 class MiscellaneousWeather extends StatelessWidget {
   final WeatherController wc;
+  final BuildContext context;
   const MiscellaneousWeather({
     Key? key,
     required this.wc,
+    required this.context,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return miscellaneousWeather();
   }
 
   Widget miscellaneousWeather() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+    return Container(
+      // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Container(
         height: 290,
         // color: Colors.pink,
@@ -27,45 +31,33 @@ class MiscellaneousWeather extends StatelessWidget {
               customTileList(
                 WeatherIcons.day_sunny,
                 "UV Light",
-                uvCalculator(
-                  _currentWeatherExtra['uvi'],
+                wc.simplifyUV(
+                  wc.currentWeatherExtra['uvi'],
                 ),
               ),
-              customTileList(
-                WeatherIcons.sunrise,
-                "Sunrise",
-                DateFormat('hh:mm aaa').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                      _currentWeatherExtra['sunrise'] * 1000),
-                ),
-              ),
-              customTileList(
-                WeatherIcons.sunset,
-                "Sunset",
-                DateFormat('hh:mm aaa').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                      _currentWeatherExtra['sunset'] * 1000),
-                ),
-              ),
+              customTileList(WeatherIcons.sunrise, "Sunrise",
+                  wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunrise'])),
+              customTileList(WeatherIcons.sunset, "Sunset",
+                  wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunset'])),
               customTileList(
                 WeatherIcons.humidity,
                 "Humidity",
-                (_currentWeatherExtra['humidity']).toString() + "%",
+                wc.currentWeatherExtra['humidity'].toString() + "%",
               ),
               customTileList(
                 WeatherIcons.cloud,
                 "Cloudiness",
-                _currentWeatherExtra['clouds'].toString() + "%",
+                wc.currentWeatherExtra['clouds'].toString() + "%",
               ),
               customTileList(
                 WeatherIcons.windy,
                 "Wind Speed",
-                _currentWeatherExtra['wind_speed'].toString() + " m/s",
+                wc.currentWeatherExtra['wind_speed'].toString() + " m/s",
               ),
               customTileList(
                 WeatherIcons.barometer,
                 "Pressure",
-                _currentWeatherExtra['pressure'].toString() + " hPa",
+                wc.currentWeatherExtra['pressure'].toString() + " hPa",
               ),
             ],
           ),
@@ -87,7 +79,7 @@ class MiscellaneousWeather extends StatelessWidget {
                 size: 18,
                 color: Theme.of(context).textTheme.headline3?.color,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Text(title),
