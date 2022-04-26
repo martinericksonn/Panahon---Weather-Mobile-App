@@ -12,6 +12,7 @@ class WeatherController {
   late Map<String, dynamic> currentWeatherExtra;
 
   Future<String> getWeather() async {
+    // print('asdf');
     String cityName = 'lapu-lapu city';
     WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
 
@@ -31,18 +32,18 @@ class WeatherController {
       );
 
       final response = await http.get(url);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final jsonResponse = convert.jsonDecode(response.body);
         hourlyWeather = jsonResponse['hourly'];
         dailyWeather = jsonResponse['daily'];
         currentWeatherExtra = jsonResponse['current'];
+        return "sucess";
       } else {
-        // throw HttpRequestEventTarget.errorEvent;
+        return Future.error(response.statusCode);
       }
-
-      return "sucess";
     } catch (e) {
-      return e.toString();
+      return Future.error(e);
     }
   }
 

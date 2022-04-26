@@ -9,7 +9,6 @@ import 'package:panahon/src/weather_controller.dart';
 
 class Home extends StatefulWidget {
   final ThemeController themeController;
-  // final WeatherController weatherController;
 
   Home(
     this.themeController, {
@@ -21,15 +20,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late AssetImage bkgImage;
   late final WeatherController _weatherController;
   ThemeController get _themeController => widget.themeController;
 
   @override
   void initState() {
-    // bkgImage = _themeController.backgroundSelector();
     _weatherController = WeatherController();
-
     super.initState();
   }
 
@@ -71,13 +67,11 @@ class _HomeState extends State<Home> {
             body: FutureBuilder(
               future: _weatherController.getWeather(),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasError) {
-                  Text('Error: ${snapshot.error}');
-                }
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData && snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.connectionState == ConnectionState.none) {
+                } else if (snapshot.connectionState == ConnectionState.none) {
                   return Center(child: Text("No Internet Connection"));
                 } else {
                   return weatherCards(context);
