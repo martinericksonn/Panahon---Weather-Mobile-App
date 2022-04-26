@@ -121,7 +121,7 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: MediaQuery.of(context).size.height / 9,
+                            height: MediaQuery.of(context).size.height / 10,
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
@@ -147,18 +147,27 @@ class _HomeState extends State<Home> {
 
   Widget miscellaneousWeather() {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Container(
         height: 200,
         // color: Colors.pink,
         child: Card(
             child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("UV Index"),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.light,
+                        color: Theme.of(context).textTheme.headline3?.color,
+                      ),
+                      Text("UV Index"),
+                    ],
+                  ),
                   Text(
                     "Low",
                   )
