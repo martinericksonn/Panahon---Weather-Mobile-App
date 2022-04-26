@@ -24,27 +24,25 @@ class _HomeState extends State<Home> {
   late AssetImage bkgImage;
   ThemeController get _themeController => widget.themeController;
 
-  late List<Weather> _fiveDayWeather;
   late Weather _currentWeather;
+  // late List<Weather> _fiveDayWeather;
   late List<dynamic> _hourlyWeather;
   late List<dynamic> _dailyWeather;
 
   @override
   void initState() {
     bkgImage = _themeController.backgroundSelector();
+
     // getWeather();
     super.initState();
   }
 
-  // bool _floating = false;
-  // bool _pinned = false;
-  // bool _snap = false;
   var kExpandedHeight = 160.0;
 
   Future<String> _getWeather() async {
     try {
       _currentWeather = await _wf.currentWeatherByCityName(cityName);
-      _fiveDayWeather = await _wf.fiveDayForecastByCityName(cityName);
+      // _fiveDayWeather = await _wf.fiveDayForecastByCityName(cityName);
       // print(_fiveDayWeather);
       final url = Uri.https(
         'api.openweathermap.org',
@@ -61,13 +59,9 @@ class _HomeState extends State<Home> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final jsonResponse = convert.jsonDecode(response.body);
-
-        print(jsonResponse.runtimeType);
         _hourlyWeather = jsonResponse['hourly'];
         _dailyWeather = jsonResponse['daily'];
-      } else {
-        print('Request failed with status: ${response.statusCode}.');
-      }
+      } else {}
       return "sucess";
     } catch (e) {
       return e.toString();
@@ -102,10 +96,6 @@ class _HomeState extends State<Home> {
                     onPressed: () {},
                   ),
                 ],
-                // pinned: _pinned,
-                // snap: _snap,
-                // floating: _floating,
-                // expandedHeight: 160,
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
                 flexibleSpace: FlexibleSpaceBar(
@@ -127,11 +117,25 @@ class _HomeState extends State<Home> {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   } else {
-                    return Column(
-                      children: [
-                        currentWeather(),
-                        Expanded(child: listBuilder()),
-                      ],
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 9,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                "Weather",
+                                style: Theme.of(context).textTheme.headline2,
+                                // textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          currentWeather(),
+                          dailyWeather(),
+                          miscellaneousWeather(),
+                        ],
+                      ),
                     );
                   }
                 },
@@ -141,64 +145,94 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget miscellaneousWeather() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        height: 200,
+        // color: Colors.pink,
+        child: Card(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text("UV Index"),
+                  Text(
+                    "Low",
+                  )
+                ],
+              )
+            ],
+          ),
+        )),
+      ),
+    );
+  }
+
   Widget currentWeather() {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.location_on),
-                  Text(
-                    _currentWeather.areaName.toString(),
-                    style: Theme.of(context).textTheme.headline6,
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: Theme.of(context).textTheme.headline3?.color,
+                      ),
+                      Text(
+                        _currentWeather.areaName.toString(),
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
                   ),
+                  Text(DateFormat("E, MMM d  hh:mm aaa")
+                      .format(_currentWeather.date ?? DateTime.now())),
                 ],
               ),
-              Text(
-                  // _currentWeather.date.toString(),
-                  DateFormat("E, MMM d  hh:mm aaa")
-                      .format(_currentWeather.date ?? DateTime.now())
-                  // DateFormat.yMMMEd()
-                  // .format(_currentWeather.date ?? DateTime.now()),
-                  ),
-              Row(
+            ),
+
+            Container(
+              // color: Colors.pink,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    // color: Colors.red,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 0),
-                          height: 102,
-                          width: 64,
-                          // color: Colors.red,
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Image.network(
-                              "http://openweathermap.org/img/wn/" +
-                                  _currentWeather.weatherIcon.toString() +
-                                  "@2x.png",
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 0),
+                        height: 100,
+                        width: 64,
+                        // color: Colors.red,
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Image.network(
+                            "http://openweathermap.org/img/wn/" +
+                                _currentWeather.weatherIcon.toString() +
+                                "@2x.png",
 
-                              // color: Colors.transparent,
-                            ),
+                            // color: Colors.transparent,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            temperatureTrim(_currentWeather.temperature),
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          temperatureTrim(_currentWeather.temperature),
+                          style: Theme.of(context).textTheme.headline3,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -219,11 +253,155 @@ class _HomeState extends State<Home> {
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
-              // Text(_currentWeather.weatherDescription.toString()),
-            ],
+            ),
+            hourlyWeather()
+            // Text(_currentWeather.weatherDescription.toString()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget hourlyWeather() {
+    return Container(
+      // color: Colors.pink,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      // color: Colors.pink,
+      height: 115,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 24,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            width: 52,
+            child: Column(
+              children: [
+                Text(
+                  convertToHour(index),
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Image.network(
+                  "http://openweathermap.org/img/wn/" +
+                      _hourlyWeather[index]["weather"][0]['icon'].toString() +
+                      ".png",
+                  fit: BoxFit.fitHeight,
+                ),
+                Text(
+                  "${_hourlyWeather[index]['temp'].toInt()}°",
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      // color: Colors.pink,
+                      height: 12,
+                      alignment: Alignment.topCenter,
+                      child: Icon(
+                        Icons.water_drop_outlined,
+                        size: 8,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    Text(
+                      ("${(_hourlyWeather[index]['pop'] * 100).toInt()}% "),
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget dailyWeather() {
+    return Container(
+      height: 332,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _dailyWeather.length,
+            itemBuilder: ((context, index) {
+              // print(_currentWeather.runtimeType);
+              return Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 65,
+                    child: Text(
+                      convertToDayOfWeek(index),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              // color: Colors.pink,
+                              height: 12,
+                              alignment: Alignment.topCenter,
+                              child: Icon(
+                                Icons.water_drop_outlined,
+                                size: 8,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            Text(
+                              ("${(_dailyWeather[index]['pop'] * 100).toInt()}% "),
+                              style: Theme.of(context).textTheme.caption,
+                              // _dailyWeather[index]['rain'].toString() + "%",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          // color: Colors.pink,
+                          height: 38,
+                          child: Image.network(
+                            "http://openweathermap.org/img/wn/" +
+                                _dailyWeather[index]["weather"][0]['icon']
+                                    .toString() +
+                                ".png",
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                        // Text(_dailyWeather[index]["weather"][0]['main']),
+                        Text(
+                          temperatureTrim(
+                                  '${_dailyWeather[index]['temp']['max'].toInt()}°') +
+                              "/" +
+                              temperatureTrim(
+                                  '${_dailyWeather[index]['temp']['min'].toInt()}°'),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    // color: Colors.pink,
+                    width: 90,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        _dailyWeather[index]["weather"][0]['description']
+                            .toString(),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
           ),
         ),
       ),
@@ -231,64 +409,18 @@ class _HomeState extends State<Home> {
   }
 
   String convertToHour(index) {
-    return DateFormat("h aaa")
-        .format(DateTime.fromMillisecondsSinceEpoch(
-            _hourlyWeather[index]['dt'] * 1000))
-        .toString();
+    DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(_hourlyWeather[index]['dt'] * 1000);
+
+    return DateFormat("h aaa").format(date).toString();
   }
 
   String convertToDayOfWeek(index) {
-    return DateFormat.EEEE()
-        .format(DateTime.fromMillisecondsSinceEpoch(
-            _dailyWeather[index]['dt'] * 1000))
-        .toString();
-  }
-
-  Widget listBuilder() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-      child: Card(
-        child: ListView.builder(
-          itemCount: _dailyWeather.length - 1,
-          itemBuilder: ((context, index) {
-            // print(_currentWeather.runtimeType);
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(convertToDayOfWeek(index + 1)),
-                  Row(
-                    children: [
-                      Text(_dailyWeather[index]['rain'].toString()[0] + "%"),
-                      Image.network(
-                        "http://openweathermap.org/img/wn/" +
-                            _dailyWeather[index]["weather"][0]['icon']
-                                .toString() +
-                            ".png",
-                      ),
-                      Text(
-                        temperatureTrim(
-                                '${_dailyWeather[index]['temp']['max'].toInt()}°') +
-                            "/" +
-                            temperatureTrim(
-                                '${_dailyWeather[index]['temp']['min'].toInt()}°'),
-                      )
-                    ],
-                  ),
-                  Text(_dailyWeather[index]["weather"][0]['main']),
-
-                  // DateFormat("E, MMM d  hh:mm aaa").format(
-                  // DateTime(
-
-                  // ),
-                  // ),
-                ],
-              ),
-            );
-          }),
-        ),
-      ),
-    );
+    return index == 0
+        ? "Today"
+        : DateFormat.EEEE()
+            .format(DateTime.fromMillisecondsSinceEpoch(
+                _dailyWeather[index]['dt'] * 1000))
+            .toString();
   }
 }

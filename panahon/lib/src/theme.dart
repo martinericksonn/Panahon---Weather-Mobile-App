@@ -9,7 +9,7 @@ class ThemeController {
 
   ThemeController() {
     dateNow = DateTime.now().hour;
-    dateNow = 16;
+    dateNow = 1;
   }
 
   Alignment backgroundShift() {
@@ -76,11 +76,12 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        color: Color.fromRGBO(255, 255, 255, .5),
+        // color: Color.fromARGB(111, 224, 231, 236),
+        color: Colors.white24,
       ),
       textTheme: const TextTheme(
         bodyText2: TextStyle(
-          color: Color(0xff737373),
+          color: Color.fromARGB(255, 56, 56, 56),
         ),
         headline1: TextStyle(
           fontWeight: FontWeight.bold,
@@ -106,10 +107,14 @@ class ThemeController {
           fontWeight: FontWeight.bold,
         ),
         caption: TextStyle(
+          fontSize: 13,
           color: Color(0xff737373),
         ),
       ),
       primaryColor: Colors.black,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        secondary: Color(0xff7CB1FF), // Your accent color
+      ),
     );
   }
 
@@ -118,11 +123,12 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        color: Color.fromRGBO(255, 223, 148, .5),
+        color: Color.fromRGBO(255, 223, 148, .9),
       ),
       textTheme: const TextTheme(
         bodyText2: TextStyle(
-          color: Color(0xff505050),
+          color: Color.fromARGB(255, 41, 41, 41),
+          // color: Colors.black,
         ),
         headline1: TextStyle(
           fontWeight: FontWeight.bold,
@@ -148,10 +154,14 @@ class ThemeController {
           letterSpacing: 0.2,
         ),
         caption: TextStyle(
-          color: Color(0xff505050),
-        ),
+            // color: Color(0xff505050),
+
+            ),
       ),
       primaryColor: Colors.white,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        secondary: Color(0xff2E81FD), // Your accent color
+      ),
     );
   }
 
@@ -161,14 +171,10 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        color: Color.fromRGBO(33, 44, 55, .5),
-        // color: Color.fromRGB0(99, 99, 99, 1),
+        // color: Color.fromRGBO(33, 44, 55, .7),
+        color: Colors.black54,
       ),
       textTheme: const TextTheme(
-        // labelMedium: TextStyle(color: Colors.white),
-        // headline3: ,
-        // headline2: TextStyle(color: Color(0xff505050)),
-        // bodyText1: TextStyle(color: Color(0xff505050)),
         bodyText2: TextStyle(
           color: Color(0xffCECECE),
         ),
@@ -200,6 +206,9 @@ class ThemeController {
         ),
       ),
       primaryColor: Colors.white,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        secondary: Color(0xff3A89FF), // Your accent color
+      ),
     );
   }
 }
