@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panahon/src/weather_controller.dart';
 
+import 'hourly_weather.dart';
+
 class CurrentWeather extends StatelessWidget {
   final WeatherController wc;
 
@@ -16,12 +18,12 @@ class CurrentWeather extends StatelessWidget {
   }
 
   Widget currentWeather(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+    return Container(
+      // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Card(
         child: Column(
           children: [
-            Padding(
+            Container(
               padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,9 +79,10 @@ class CurrentWeather extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                    width: 110,
-                    // color: Colors.pink,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -108,7 +111,9 @@ class CurrentWeather extends StatelessWidget {
                 ],
               ),
             ),
-            // hourlyWeather()
+            HourlyWeather(
+              wc: wc,
+            ),
             // Text(_currentWeather.weatherDescription.toString()),
           ],
         ),

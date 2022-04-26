@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:panahon/src/theme_controller.dart';
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
@@ -45,10 +46,6 @@ class WeatherController {
     }
   }
 
-  String temperatureTrim(var temperature) {
-    return temperature.toString().replaceAll(" Celsius", "°");
-  }
-
   String simplifyUV(uv) {
     if (uv >= 11) {
       return "Extemely High";
@@ -63,5 +60,23 @@ class WeatherController {
     } else {
       return "Could not calculate";
     }
+  }
+
+  String temperatureTrim(var temperature) {
+    return temperature.toString().replaceAll(" Celsius", "°");
+  }
+
+  String dateFormatHour(int timesamp) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timesamp * 1000);
+
+    return DateFormat("h aaa").format(date).toString();
+  }
+
+  String dateFormatWeek(int timesamp, [int index = 0]) {
+    return index == 0
+        ? "Today"
+        : DateFormat.EEEE()
+            .format(DateTime.fromMillisecondsSinceEpoch(timesamp * 1000))
+            .toString();
   }
 }
