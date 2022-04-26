@@ -76,12 +76,12 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        // color: Color.fromARGB(111, 224, 231, 236),
-        color: Colors.white24,
+        color: Color.fromARGB(157, 165, 198, 223),
+        // color: Colors.white60,
       ),
       textTheme: const TextTheme(
         bodyText2: TextStyle(
-          color: Color.fromARGB(255, 56, 56, 56),
+          color: Color.fromARGB(255, 34, 34, 34),
         ),
         headline1: TextStyle(
           fontWeight: FontWeight.bold,
@@ -108,7 +108,7 @@ class ThemeController {
         ),
         caption: TextStyle(
           fontSize: 13,
-          color: Color(0xff737373),
+          color: Color.fromARGB(255, 92, 92, 92),
         ),
       ),
       primaryColor: Colors.black,
@@ -123,7 +123,7 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        color: Color.fromRGBO(255, 223, 148, .9),
+        color: Color.fromRGBO(255, 223, 148, .5),
       ),
       textTheme: const TextTheme(
         bodyText2: TextStyle(

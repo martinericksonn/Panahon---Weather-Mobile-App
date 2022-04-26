@@ -6,6 +6,7 @@ import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class Home extends StatefulWidget {
   final ThemeController themeController;
@@ -29,6 +30,8 @@ class _HomeState extends State<Home> {
   late List<dynamic> _hourlyWeather;
   late List<dynamic> _dailyWeather;
 
+  late Map<String, dynamic> _currentWeatherExtra;
+
   @override
   void initState() {
     bkgImage = _themeController.backgroundSelector();
@@ -50,7 +53,7 @@ class _HomeState extends State<Home> {
         {
           'lat': '10.3167',
           'lon': '123.8907',
-          'exclude': 'minutely,current',
+          'exclude': 'minutely',
           'units': 'metric',
           'appid': 'dbefc4cc13f502139796b12c559d332d',
         },
@@ -61,7 +64,9 @@ class _HomeState extends State<Home> {
         final jsonResponse = convert.jsonDecode(response.body);
         _hourlyWeather = jsonResponse['hourly'];
         _dailyWeather = jsonResponse['daily'];
+        _currentWeatherExtra = jsonResponse['current'];
       } else {}
+
       return "sucess";
     } catch (e) {
       return e.toString();
@@ -145,34 +150,76 @@ class _HomeState extends State<Home> {
     );
   }
 
+  String uvCalculator(uv) {
+    if (uv >= 11) {
+      return "Extemely High";
+    } else if (uv > 7) {
+      return "Very High";
+    } else if (uv > 5) {
+      return "High";
+    } else if (uv > 2) {
+      return "Medium";
+    } else if (uv <= 2) {
+      return "Low";
+    } else {
+      return "Could not calculate";
+    }
+  }
+
   Widget miscellaneousWeather() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Container(
-        height: 200,
+        height: 290,
         // color: Colors.pink,
         child: Card(
-            child: Padding(
-          padding: const EdgeInsets.all(16.0),
+            child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.light,
-                        color: Theme.of(context).textTheme.headline3?.color,
-                      ),
-                      Text("UV Index"),
-                    ],
-                  ),
-                  Text(
-                    "Low",
-                  )
-                ],
-              )
+              customTileList(
+                WeatherIcons.day_sunny,
+                "UV Light",
+                uvCalculator(
+                  _currentWeatherExtra['uvi'],
+                ),
+              ),
+              customTileList(
+                WeatherIcons.sunrise,
+                "Sunrise",
+                DateFormat('hh:mm aaa').format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                      _currentWeatherExtra['sunrise'] * 1000),
+                ),
+              ),
+              customTileList(
+                WeatherIcons.sunset,
+                "Sunset",
+                DateFormat('hh:mm aaa').format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                      _currentWeatherExtra['sunset'] * 1000),
+                ),
+              ),
+              customTileList(
+                WeatherIcons.humidity,
+                "Humidity",
+                (_currentWeatherExtra['humidity']).toString() + "%",
+              ),
+              customTileList(
+                WeatherIcons.cloud,
+                "Cloudiness",
+                _currentWeatherExtra['clouds'].toString() + "%",
+              ),
+              customTileList(
+                WeatherIcons.windy,
+                "Wind Speed",
+                _currentWeatherExtra['wind_speed'].toString() + " m/s",
+              ),
+              customTileList(
+                WeatherIcons.barometer,
+                "Pressure",
+                _currentWeatherExtra['pressure'].toString() + " hPa",
+              ),
             ],
           ),
         )),
@@ -180,9 +227,36 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget customTileList(IconData icon, String title, String result) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: 38,
+          child: Row(
+            children: [
+              BoxedIcon(
+                icon,
+                size: 18,
+                color: Theme.of(context).textTheme.headline3?.color,
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Text(title),
+            ],
+          ),
+        ),
+        Text(
+          result,
+        ),
+      ],
+    );
+  }
+
   Widget currentWeather() {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Card(
         child: Column(
           children: [
@@ -428,6 +502,15 @@ class _HomeState extends State<Home> {
     return index == 0
         ? "Today"
         : DateFormat.EEEE()
+            .format(DateTime.fromMillisecondsSinceEpoch(
+                _dailyWeather[index]['dt'] * 1000))
+            .toString();
+  }
+
+  String convertToTimeOfDay(index) {
+    return index == 0
+        ? "Today"
+        : DateFormat.QQQ()
             .format(DateTime.fromMillisecondsSinceEpoch(
                 _dailyWeather[index]['dt'] * 1000))
             .toString();
