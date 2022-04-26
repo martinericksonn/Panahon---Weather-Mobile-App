@@ -1,15 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
-import 'package:panahon/src/theme.dart';
+import 'package:panahon/src/screen/widgets/current_weather.dart';
+import 'package:panahon/src/theme_controller.dart';
+import 'package:panahon/src/weather_controller.dart';
 import 'package:weather/weather.dart';
-import 'package:http/http.dart' as http;
+
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class Home extends StatefulWidget {
   final ThemeController themeController;
+  // final WeatherController weatherController;
+
   Home(
     this.themeController, {
     Key? key,
@@ -20,9 +24,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String cityName = 'cebu';
+  String cityName = 'lapu-lapu city';
   WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
   late AssetImage bkgImage;
+  late final WeatherController _weatherController;
+
   ThemeController get _themeController => widget.themeController;
 
   late Weather _currentWeather;
@@ -35,43 +41,47 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     bkgImage = _themeController.backgroundSelector();
-
+    _weatherController = WeatherController();
     // getWeather();
     super.initState();
   }
 
+  // Future<String> initWeather() async {
+  //   return await _weatherController.getWeather();
+  // }
+
   var kExpandedHeight = 160.0;
 
-  Future<String> _getWeather() async {
-    try {
-      _currentWeather = await _wf.currentWeatherByCityName(cityName);
-      // _fiveDayWeather = await _wf.fiveDayForecastByCityName(cityName);
-      // print(_fiveDayWeather);
-      final url = Uri.https(
-        'api.openweathermap.org',
-        'data/2.5/onecall',
-        {
-          'lat': '10.3167',
-          'lon': '123.8907',
-          'exclude': 'minutely',
-          'units': 'metric',
-          'appid': 'dbefc4cc13f502139796b12c559d332d',
-        },
-      );
+  // Future<String> _getWeather() async {
+  //   try {
+  //     _currentWeather = await _wf.currentWeatherByCityName(cityName);
+  //     // _fiveDayWeather = await _wf.fiveDayForecastByCityName(cityName);
+  //     // print(_fiveDayWeather);
+  //     final url = Uri.https(
+  //       'api.openweathermap.org',
+  //       'data/2.5/onecall',
+  //       {
+  //         'lat': '10.3167',
+  //         'lon': '123.8907',
+  //         'exclude': 'minutely',
+  //         'units': 'metric',
+  //         'appid': 'dbefc4cc13f502139796b12c559d332d',
+  //       },
+  //     );
 
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final jsonResponse = convert.jsonDecode(response.body);
-        _hourlyWeather = jsonResponse['hourly'];
-        _dailyWeather = jsonResponse['daily'];
-        _currentWeatherExtra = jsonResponse['current'];
-      } else {}
+  //     final response = await http.get(url);
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = convert.jsonDecode(response.body);
+  //       _hourlyWeather = jsonResponse['hourly'];
+  //       _dailyWeather = jsonResponse['daily'];
+  //       _currentWeatherExtra = jsonResponse['current'];
+  //     } else {}
 
-      return "sucess";
-    } catch (e) {
-      return e.toString();
-    }
-  }
+  //     return "sucess";
+  //   } catch (e) {
+  //     return e.toString();
+  //   }
+  // }
 
   String temperatureTrim(var temperature) {
     return temperature.toString().replaceAll(" Celsius", "°");
@@ -113,7 +123,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               body: FutureBuilder(
-                future: _getWeather(),
+                future: _weatherController.getWeather(),
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
                   if (snapshot.hasError) {
@@ -121,6 +131,9 @@ class _HomeState extends State<Home> {
                   }
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.connectionState == ConnectionState.none) {
+                    return Center(child: Text("No Internet Connection"));
                   } else {
                     return SingleChildScrollView(
                       child: Column(
@@ -136,9 +149,9 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          currentWeather(),
-                          dailyWeather(),
-                          miscellaneousWeather(),
+                          CurrentWeather(wc: _weatherController)
+                          // dailyWeather(),
+                          // miscellaneousWeather(),
                         ],
                       ),
                     );
@@ -317,25 +330,32 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        _currentWeather.weatherMain.toString(),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      Text(
-                        temperatureTrim(_currentWeather.tempMin) +
-                            "/" +
-                            temperatureTrim(_currentWeather.tempMax),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      Text(
-                        "Feels like " +
-                            temperatureTrim(_currentWeather.tempFeelsLike),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ],
+                  Container(
+                    width: 110,
+                    // color: Colors.pink,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            _currentWeather.weatherDescription.toString(),
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ),
+                        Text(
+                          temperatureTrim(_currentWeather.tempMin) +
+                              "/" +
+                              temperatureTrim(_currentWeather.tempMax),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        Text(
+                          "Feels like " +
+                              temperatureTrim(_currentWeather.tempFeelsLike),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

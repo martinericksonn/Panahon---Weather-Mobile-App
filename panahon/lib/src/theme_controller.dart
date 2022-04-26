@@ -25,18 +25,6 @@ class ThemeController {
         default:
           return Alignment.centerLeft;
       }
-
-      //   return AssetImage("assets/background/nightsky.jpeg");
-      // } else if (dateNow > 15) {
-      //   return AssetImage("assets/background/afternoonsky.jpg");
-      // } else if (dateNow > 6) {
-      //   return AssetImage("assets/background/morningsky.jpg");
-      // } else if (dateNow > 4) {
-      //   return AssetImage("assets/background/afternoonsky.jpg");
-      // } else {
-      //   return AssetImage("assets/background/morningsky.jpg");
-      // }
-
     } else {
       return Alignment.centerLeft;
     }

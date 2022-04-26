@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:panahon/src/screen/home.dart';
-import 'package:panahon/src/screen/home_2.dart';
-import 'package:panahon/src/theme.dart';
+
+import 'package:panahon/src/theme_controller.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({
