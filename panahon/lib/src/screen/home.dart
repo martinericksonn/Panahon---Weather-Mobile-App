@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:panahon/src/screen/search_screen.dart';
 import 'package:panahon/src/screen/widgets/current_weather.dart';
 import 'package:panahon/src/screen/widgets/dialy_weather.dart';
 import 'package:panahon/src/screen/widgets/micesllaneous_weather.dart';
@@ -50,7 +51,16 @@ class _HomeState extends State<Home> {
                     Icons.search,
                     color: Theme.of(context).primaryColor,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchScreen(
+                          themeController: _themeController,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
               backgroundColor: Colors.transparent,
@@ -88,17 +98,7 @@ class _HomeState extends State<Home> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 10,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Weather",
-                style: Theme.of(context).textTheme.headline2,
-                // textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+          // appHeadline(context),
           CurrentWeather(wc: _weatherController),
           DailyWeather(wc: _weatherController),
           MiscellaneousWeather(wc: _weatherController, context: context)
@@ -106,6 +106,20 @@ class _HomeState extends State<Home> {
           // dailyWeather(),
           // miscellaneousWeather(),
         ],
+      ),
+    );
+  }
+
+  SizedBox appHeadline(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 10,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(
+          "Weather",
+          style: Theme.of(context).textTheme.headline2,
+          // textAlign: TextAlign.center,
+        ),
       ),
     );
   }

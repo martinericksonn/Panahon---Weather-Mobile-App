@@ -9,7 +9,7 @@ class ThemeController {
 
   ThemeController() {
     dateNow = DateTime.now().hour;
-    dateNow = 1;
+    dateNow = 16;
   }
 
   Alignment backgroundShift() {
