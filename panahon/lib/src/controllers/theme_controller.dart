@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class ThemeController with ChangeNotifier {
+class ThemeController {
   // ignore: prefer_typing_uninitialinuukzed_variables
   late int dateNow;
   final StreamController<ThemeData> _controller = StreamController();
@@ -18,8 +18,8 @@ class ThemeController with ChangeNotifier {
 
   void setTimeNow(int time) {
     dateNow = time;
-    _controller.add(_themeSelector());
-    notifyListeners();
+    _controller.add(_themeSelector(time));
+    // notifyListeners();
   }
 
   Alignment backgroundShift() {
@@ -54,7 +54,7 @@ class ThemeController with ChangeNotifier {
     }
   }
 
-  ThemeData _themeSelector() {
+  ThemeData _themeSelector(dateNow) {
     if (dateNow > 18 || dateNow < 4) {
       return _nightTheme();
     } else if (dateNow > 15) {

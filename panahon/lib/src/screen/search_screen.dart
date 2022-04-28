@@ -31,8 +31,7 @@ class SearchScreen extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    weatherController.setCity(_textEditingController.text);
-                    Navigator.of(context).pop(_textEditingController.text);
+                    setCity(context, _textEditingController);
                     // print(_textEditingController.value.toString());
                   },
                   icon: Icon(
@@ -48,12 +47,10 @@ class SearchScreen extends StatelessWidget {
                 child: TextField(
                   autofocus: true,
                   onSubmitted: (_textEditingController) {
+                    setCity(context, this._textEditingController);
                     // Random random = Random();
                     // int randomNumber = random.nextInt(24);
                     // themeController.setTimeNow(randomNumber);
-
-                    weatherController.setCity(this._textEditingController.text);
-                    Navigator.of(context).pop(this._textEditingController.text);
                   },
                   controller: _textEditingController,
                   style: Theme.of(context).textTheme.headline5,
@@ -68,5 +65,10 @@ class SearchScreen extends StatelessWidget {
         ),
       ],
     ));
+  }
+
+  void setCity(
+      BuildContext context, TextEditingController textEditingController) {
+    Navigator.of(context).pop(textEditingController.text);
   }
 }

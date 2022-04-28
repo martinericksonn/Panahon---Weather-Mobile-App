@@ -71,8 +71,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             body: StreamBuilder(
-              stream: _weatherController.getWeather(),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              stream: _weatherController.stream,
+              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());
@@ -129,6 +129,7 @@ class _HomeState extends State<Home> {
       setState(() {
         var date = int.parse(DateFormat(DateFormat.HOUR24)
             .format(_weatherController.getPSTTime()));
+        _weatherController.setCity(cityName);
         _themeController.setTimeNow(date);
       });
     }

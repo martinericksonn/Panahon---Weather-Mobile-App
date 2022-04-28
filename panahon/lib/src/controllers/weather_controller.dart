@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:panahon/src/controllers/theme_controller.dart';
 
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
@@ -9,64 +11,74 @@ import 'dart:convert' as convert;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
-class WeatherController with ChangeNotifier {
+class WeatherController {
+  late final ThemeController themeController;
   late Weather currentWeather;
   late List<dynamic> hourlyWeather;
   late List<dynamic> dailyWeather;
   late String timeZone;
   late Map<String, dynamic> currentWeatherExtra;
-  late String cityName = 'lapu-lapu city';
-  final WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
+  late String? cityName = 'lapu-lapu city';
+  final key = '6994e452939894a4cf970d7fbafe71b8';
+  late final WeatherFactory _wf;
 
+  final StreamController<String?> _controller = StreamController();
+  Stream<String?> get stream => _controller.stream;
+
+  WeatherController() {
+    // themeController = tc;
+    _wf = WeatherFactory(key);
+  }
   void setCity(String city) {
     cityName = city;
-    notifyListeners();
+    getWeather();
   }
 
-  Stream<String> getWeather() {
+  void getWeather() async {
+    _controller.add(null);
     tz.initializeTimeZones();
-    late final StreamController<String> controller;
-    controller = StreamController<String>(
-      onListen: () async {
-        try {
-          currentWeather = await _wf.currentWeatherByCityName(cityName);
 
-          final url = Uri.https(
-            'api.openweathermap.org',
-            'data/2.5/onecall',
-            {
-              'lat': currentWeather.latitude.toString(),
-              'lon': currentWeather.longitude.toString(),
-              'exclude': 'minutely',
-              'units': 'metric',
-              'appid': 'dbefc4cc13f502139796b12c559d332d',
-            },
-          );
+    try {
+      if (cityName == null) {
+        return;
+      }
+      print("IM BEING CALLED UPON!");
+      currentWeather = await _wf.currentWeatherByCityName(cityName ?? 'none');
 
-          final response = await http.get(url);
+      final url = Uri.https(
+        'api.openweathermap.org',
+        'data/2.5/onecall',
+        {
+          'lat': currentWeather.latitude.toString(),
+          'lon': currentWeather.longitude.toString(),
+          'exclude': 'minutely',
+          'units': 'metric',
+          'appid': key,
+        },
+      );
 
-          if (response.statusCode == 200) {
-            final jsonResponse = convert.jsonDecode(response.body);
+      final response = await http.get(url);
 
-            hourlyWeather = jsonResponse['hourly'];
-            dailyWeather = jsonResponse['daily'];
-            currentWeatherExtra = jsonResponse['current'];
-            timeZone = jsonResponse['timezone'];
+      if (response.statusCode == 200) {
+        final jsonResponse = convert.jsonDecode(response.body);
 
-            controller.add("success");
-            return;
-          } else {
-            controller.addError(Future.error(response.statusCode));
-            return;
-          }
-        } catch (e) {
-          controller.addError((e));
-          return;
-        }
-      },
-    );
+        hourlyWeather = jsonResponse['hourly'];
+        dailyWeather = jsonResponse['daily'];
+        currentWeatherExtra = jsonResponse['current'];
+        timeZone = jsonResponse['timezone'];
 
-    return controller.stream;
+        // themeController.setTimeNow(getTimezoneHour());
+        cityName = null;
+        _controller.add("success");
+        return;
+      } else {
+        _controller.addError(Future.error(response.statusCode));
+        return;
+      }
+    } catch (e) {
+      _controller.addError((e));
+      return;
+    }
   }
 
   String simplifyUV(uv) {
@@ -120,8 +132,11 @@ class WeatherController with ChangeNotifier {
 
       return tz.TZDateTime.from(now, pacificTimeZone);
     } catch (e) {
-      print(e);
       return DateTime.now();
     }
+  }
+
+  int getTimezoneHour() {
+    return int.parse(DateFormat(DateFormat.HOUR24).format(getPSTTime()));
   }
 }
