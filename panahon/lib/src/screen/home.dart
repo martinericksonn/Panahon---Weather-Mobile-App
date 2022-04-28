@@ -165,28 +165,18 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(
-            "Mobile Application Development 2 - Midterm Project ",
-            style: footerTextStyle(),
-          ),
+          Text("Mobile Application Development 2 - Midterm Project ",
+              style: Theme.of(context).textTheme.overline),
           Text(
             "Martin Erickson Lapetaje | BSCS - 3",
-            style: footerTextStyle(),
+            style: Theme.of(context).textTheme.overline,
           ),
           Text(
-            " © Panahon 2022 ",
-            style: footerTextStyle(),
+            "© Panahon 2022",
+            style: Theme.of(context).textTheme.overline,
           ),
         ],
       ),
-    );
-  }
-
-  TextStyle footerTextStyle() {
-    return TextStyle(
-      fontSize: 10,
-      letterSpacing: .2,
-      color: Theme.of(context).textTheme.caption?.color,
     );
   }
 }

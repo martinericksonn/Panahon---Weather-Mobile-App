@@ -98,6 +98,10 @@ class ThemeController {
           fontSize: 13,
           color: Color.fromARGB(255, 92, 92, 92),
         ),
+        overline: TextStyle(
+          color: Color.fromARGB(211, 92, 92, 92),
+          letterSpacing: .2,
+        ),
       ),
       primaryColor: Colors.black,
       colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -145,6 +149,10 @@ class ThemeController {
           fontSize: 13,
           color: Color.fromARGB(255, 54, 54, 54),
         ),
+        overline: TextStyle(
+          color: Color.fromARGB(129, 172, 172, 172),
+          letterSpacing: .2,
+        ),
       ),
       primaryColor: Colors.white,
       colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -191,6 +199,10 @@ class ThemeController {
         ),
         caption: TextStyle(
           color: Color(0xffCECECE),
+        ),
+        overline: TextStyle(
+          color: Color.fromARGB(137, 206, 206, 206),
+          letterSpacing: .2,
         ),
       ),
       primaryColor: Colors.white,
