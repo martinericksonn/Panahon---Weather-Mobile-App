@@ -9,7 +9,7 @@ class ThemeController {
 
   ThemeController() {
     dateNow = DateTime.now().hour;
-    dateNow = 1;
+    dateNow = 9;
   }
 
   Alignment backgroundShift() {
@@ -64,8 +64,8 @@ class ThemeController {
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 0,
-        color: Color.fromARGB(157, 165, 198, 223),
-        // color: Colors.white60,
+        // color: Color.fromARGB(157, 165, 198, 223),
+        color: Color.fromARGB(153, 226, 226, 226),
       ),
       textTheme: const TextTheme(
         bodyText2: TextStyle(

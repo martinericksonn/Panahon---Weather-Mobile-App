@@ -47,6 +47,11 @@ class SearchScreen extends StatelessWidget {
               // The search area here
               title: Center(
                 child: TextField(
+                  autofocus: true,
+                  onSubmitted: (_textEditingController) {
+                    weatherController.setCity(this._textEditingController.text);
+                    Navigator.of(context).pop(this._textEditingController.text);
+                  },
                   controller: _textEditingController,
                   style: Theme.of(context).textTheme.headline5,
                   decoration: InputDecoration(

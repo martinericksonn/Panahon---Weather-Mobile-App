@@ -73,7 +73,7 @@ class MiscellaneousWeather extends StatelessWidget {
             children: [
               BoxedIcon(
                 icon,
-                size: 18,
+                size: 22,
                 color: Theme.of(context).textTheme.headline3?.color,
               ),
               const SizedBox(

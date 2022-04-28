@@ -122,9 +122,9 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    setState(() {
-      if (cityName != null) {}
-    });
+    if (cityName != null) {
+      setState(() {});
+    }
   }
 
   SingleChildScrollView weatherCards(BuildContext context) {
@@ -136,10 +136,8 @@ class _HomeState extends State<Home> {
             // appHeadline(context),
             CurrentWeather(wc: _weatherController),
             DailyWeather(wc: _weatherController),
-            MiscellaneousWeather(wc: _weatherController, context: context)
-
-            // dailyWeather(),
-            // miscellaneousWeather(),
+            MiscellaneousWeather(wc: _weatherController, context: context),
+            footer(),
           ],
         ),
       ),
@@ -157,6 +155,38 @@ class _HomeState extends State<Home> {
           // textAlign: TextAlign.center,
         ),
       ),
+    );
+  }
+
+  Widget footer() {
+    return Container(
+      alignment: Alignment.topCenter,
+      // color: Colors.pink,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(
+            "Mobile Application Development 2 - Midterm Project ",
+            style: footerTextStyle(),
+          ),
+          Text(
+            "Martin Erickson Lapetaje | BSCS - 3",
+            style: footerTextStyle(),
+          ),
+          Text(
+            " © Panahon 2022 ",
+            style: footerTextStyle(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  TextStyle footerTextStyle() {
+    return TextStyle(
+      fontSize: 10,
+      letterSpacing: .2,
+      color: Theme.of(context).textTheme.caption?.color,
     );
   }
 }
