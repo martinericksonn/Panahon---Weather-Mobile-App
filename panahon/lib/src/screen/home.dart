@@ -80,9 +80,23 @@ class _HomeState extends State<Home> {
                 }
 
                 if (!snapshot.hasData && snapshot.hasError) {
-                  return Text(
-                    'Error: ${_weatherController.cityName} not found',
-                    style: Theme.of(context).textTheme.headline5,
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '"${_weatherController.cityName}" not found',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        Text(
+                          'Try searching for a city name',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ],
+                    ),
                   );
                 } else if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());

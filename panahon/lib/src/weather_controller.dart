@@ -54,23 +54,20 @@ class WeatherController with ChangeNotifier {
           );
 
           final response = await http.get(url);
-          print(response.statusCode);
+
           if (response.statusCode == 200) {
-            print("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
             final jsonResponse = convert.jsonDecode(response.body);
             hourlyWeather = jsonResponse['hourly'];
             dailyWeather = jsonResponse['daily'];
             currentWeatherExtra = jsonResponse['current'];
             controller.add("success");
-            // return Future.sucs
+            return;
           } else {
-            print("222222222222222222222222");
             controller.addError(Future.error(response.statusCode));
             return;
           }
         } catch (e) {
-          print(e);
-          controller.addError(Future.error(e));
+          controller.addError((e));
           return;
         }
       },
@@ -91,7 +88,7 @@ class WeatherController with ChangeNotifier {
     } else if (uv <= 2) {
       return "Low";
     } else {
-      return "Could not calculate";
+      return "Could not calculate UV";
     }
   }
 
