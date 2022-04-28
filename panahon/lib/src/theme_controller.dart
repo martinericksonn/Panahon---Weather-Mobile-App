@@ -142,9 +142,9 @@ class ThemeController {
           letterSpacing: 0.2,
         ),
         caption: TextStyle(
-            // color: Color(0xff505050),
-
-            ),
+          fontSize: 13,
+          color: Color.fromARGB(255, 54, 54, 54),
+        ),
       ),
       primaryColor: Colors.white,
       colorScheme: ColorScheme.fromSwatch().copyWith(

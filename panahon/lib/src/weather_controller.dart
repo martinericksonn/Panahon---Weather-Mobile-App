@@ -1,50 +1,82 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:panahon/src/theme_controller.dart';
+// import 'package:panahon/src/theme_controller.dart';
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class WeatherController {
+class WeatherController with ChangeNotifier {
   late Weather currentWeather;
   late List<dynamic> hourlyWeather;
   late List<dynamic> dailyWeather;
   late Map<String, dynamic> currentWeatherExtra;
+  late String cityName = 'lapu-lapu city';
+  final WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
 
-  Future<String> getWeather() async {
-    // print('asdf');
-    String cityName = 'lapu-lapu city';
-    WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
+  void setCity(String city) {
+    cityName = city;
+    // print(cityName);
+    notifyListeners();
+  }
 
-    try {
-      currentWeather = await _wf.currentWeatherByCityName(cityName);
+  // final Stream<int> _bids = (() {
+  //   late final StreamController<int> controller;
+  //   controller = StreamController<int>(
+  //     onListen: () async {
+  //       await Future<void>.delayed(const Duration(seconds: 1));
+  //       controller.add(1);
+  //       await Future<void>.delayed(const Duration(seconds: 1));
+  //       await controller.close();
+  //     },
+  //   );
+  //   return controller.stream;
+  // })();
 
-      final url = Uri.https(
-        'api.openweathermap.org',
-        'data/2.5/onecall',
-        {
-          'lat': '10.3167',
-          'lon': '123.8907',
-          'exclude': 'minutely',
-          'units': 'metric',
-          'appid': 'dbefc4cc13f502139796b12c559d332d',
-        },
-      );
+  Stream<String> getWeather() {
+    late final StreamController<String> controller;
+    controller = StreamController<String>(
+      onListen: () async {
+        try {
+          currentWeather = await _wf.currentWeatherByCityName(cityName);
 
-      final response = await http.get(url);
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        final jsonResponse = convert.jsonDecode(response.body);
-        hourlyWeather = jsonResponse['hourly'];
-        dailyWeather = jsonResponse['daily'];
-        currentWeatherExtra = jsonResponse['current'];
-        return "sucess";
-      } else {
-        return Future.error(response.statusCode);
-      }
-    } catch (e) {
-      return Future.error(e);
-    }
+          final url = Uri.https(
+            'api.openweathermap.org',
+            'data/2.5/onecall',
+            {
+              'lat': currentWeather.latitude.toString(),
+              'lon': currentWeather.longitude.toString(),
+              'exclude': 'minutely',
+              'units': 'metric',
+              'appid': 'dbefc4cc13f502139796b12c559d332d',
+            },
+          );
+
+          final response = await http.get(url);
+          print(response.statusCode);
+          if (response.statusCode == 200) {
+            print("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+            final jsonResponse = convert.jsonDecode(response.body);
+            hourlyWeather = jsonResponse['hourly'];
+            dailyWeather = jsonResponse['daily'];
+            currentWeatherExtra = jsonResponse['current'];
+            controller.add("success");
+            // return Future.sucs
+          } else {
+            print("222222222222222222222222");
+            controller.addError(Future.error(response.statusCode));
+            return;
+          }
+        } catch (e) {
+          print(e);
+          controller.addError(Future.error(e));
+          return;
+        }
+      },
+    );
+
+    return controller.stream;
   }
 
   String simplifyUV(uv) {

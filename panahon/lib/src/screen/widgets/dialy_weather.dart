@@ -13,7 +13,7 @@ class DailyWeather extends StatelessWidget {
   }
 
   Widget dailyWeather() {
-    return Container(
+    return SizedBox(
       height: 332,
       // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
       child: Card(

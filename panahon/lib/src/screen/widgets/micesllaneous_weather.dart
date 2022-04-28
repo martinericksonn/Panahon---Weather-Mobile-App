@@ -18,51 +18,48 @@ class MiscellaneousWeather extends StatelessWidget {
   }
 
   Widget miscellaneousWeather() {
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-      child: Container(
-        height: 290,
-        // color: Colors.pink,
-        child: Card(
-            child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-          child: Column(
-            children: [
-              customTileList(
-                WeatherIcons.day_sunny,
-                "UV Light",
-                wc.simplifyUV(
-                  wc.currentWeatherExtra['uvi'],
-                ),
+    return SizedBox(
+      height: 290,
+      // color: Colors.pink,
+      child: Card(
+          child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+        child: Column(
+          children: [
+            customTileList(
+              WeatherIcons.day_sunny,
+              "UV Light",
+              wc.simplifyUV(
+                wc.currentWeatherExtra['uvi'],
               ),
-              customTileList(WeatherIcons.sunrise, "Sunrise",
-                  wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunrise'])),
-              customTileList(WeatherIcons.sunset, "Sunset",
-                  wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunset'])),
-              customTileList(
-                WeatherIcons.humidity,
-                "Humidity",
-                wc.currentWeatherExtra['humidity'].toString() + "%",
-              ),
-              customTileList(
-                WeatherIcons.cloud,
-                "Cloudiness",
-                wc.currentWeatherExtra['clouds'].toString() + "%",
-              ),
-              customTileList(
-                WeatherIcons.windy,
-                "Wind Speed",
-                wc.currentWeatherExtra['wind_speed'].toString() + " m/s",
-              ),
-              customTileList(
-                WeatherIcons.barometer,
-                "Pressure",
-                wc.currentWeatherExtra['pressure'].toString() + " hPa",
-              ),
-            ],
-          ),
-        )),
-      ),
+            ),
+            customTileList(WeatherIcons.sunrise, "Sunrise",
+                wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunrise'])),
+            customTileList(WeatherIcons.sunset, "Sunset",
+                wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunset'])),
+            customTileList(
+              WeatherIcons.humidity,
+              "Humidity",
+              wc.currentWeatherExtra['humidity'].toString() + "%",
+            ),
+            customTileList(
+              WeatherIcons.cloud,
+              "Cloudiness",
+              wc.currentWeatherExtra['clouds'].toString() + "%",
+            ),
+            customTileList(
+              WeatherIcons.windy,
+              "Wind Speed",
+              wc.currentWeatherExtra['wind_speed'].toString() + " m/s",
+            ),
+            customTileList(
+              WeatherIcons.barometer,
+              "Pressure",
+              wc.currentWeatherExtra['pressure'].toString() + " hPa",
+            ),
+          ],
+        ),
+      )),
     );
   }
 

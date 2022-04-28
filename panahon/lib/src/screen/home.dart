@@ -52,14 +52,7 @@ class _HomeState extends State<Home> {
                     color: Theme.of(context).primaryColor,
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchScreen(
-                          themeController: _themeController,
-                        ),
-                      ),
-                    );
+                    citySearch();
                   },
                 ),
               ],
@@ -74,15 +67,25 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            body: FutureBuilder(
-              future: _weatherController.getWeather(),
+            body: StreamBuilder(
+              stream: _weatherController.getWeather(),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  case ConnectionState.none:
+                    return Center(child: Text("No Internet Connection"));
+                  default:
+                    Center(child: Text("Something is wrong"));
+                }
+
                 if (!snapshot.hasData && snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text(
+                    'Error: ${_weatherController.cityName} not found',
+                    style: Theme.of(context).textTheme.headline5,
+                  );
                 } else if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
-                } else if (snapshot.connectionState == ConnectionState.none) {
-                  return Center(child: Text("No Internet Connection"));
                 } else {
                   return weatherCards(context);
                 }
@@ -94,18 +97,37 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<void> citySearch() async {
+    String? cityName = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchScreen(
+          themeController: _themeController,
+          weatherController: _weatherController,
+        ),
+      ),
+    );
+
+    setState(() {
+      if (cityName != null) {}
+    });
+  }
+
   SingleChildScrollView weatherCards(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          // appHeadline(context),
-          CurrentWeather(wc: _weatherController),
-          DailyWeather(wc: _weatherController),
-          MiscellaneousWeather(wc: _weatherController, context: context)
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            // appHeadline(context),
+            CurrentWeather(wc: _weatherController),
+            DailyWeather(wc: _weatherController),
+            MiscellaneousWeather(wc: _weatherController, context: context)
 
-          // dailyWeather(),
-          // miscellaneousWeather(),
-        ],
+            // dailyWeather(),
+            // miscellaneousWeather(),
+          ],
+        ),
       ),
     );
   }
