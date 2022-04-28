@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:panahon/src/screen/search_screen.dart';
+import 'package:panahon/src/screen/widgets/app_footer.dart';
 import 'package:panahon/src/screen/widgets/current_weather.dart';
 import 'package:panahon/src/screen/widgets/dialy_weather.dart';
 import 'package:panahon/src/screen/widgets/micesllaneous_weather.dart';
@@ -111,7 +112,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> citySearch() async {
+  void citySearch() async {
     String? cityName = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -137,7 +138,7 @@ class _HomeState extends State<Home> {
             CurrentWeather(wc: _weatherController),
             DailyWeather(wc: _weatherController),
             MiscellaneousWeather(wc: _weatherController, context: context),
-            footer(),
+            AppFooter(),
           ],
         ),
       ),
@@ -154,28 +155,6 @@ class _HomeState extends State<Home> {
           style: Theme.of(context).textTheme.headline2,
           // textAlign: TextAlign.center,
         ),
-      ),
-    );
-  }
-
-  Widget footer() {
-    return Container(
-      alignment: Alignment.topCenter,
-      // color: Colors.pink,
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text("Mobile Application Development 2 - Midterm Project ",
-              style: Theme.of(context).textTheme.overline),
-          Text(
-            "Martin Erickson Lapetaje | BSCS - 3",
-            style: Theme.of(context).textTheme.overline,
-          ),
-          Text(
-            "© Panahon 2022",
-            style: Theme.of(context).textTheme.overline,
-          ),
-        ],
       ),
     );
   }

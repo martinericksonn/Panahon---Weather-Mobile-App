@@ -14,10 +14,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Home(themeController),
-      theme: themeController.themeSelector(context),
-    );
+    return StreamBuilder(
+        stream: themeController.stream,
+        builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Home(themeController),
+            theme: snapshot.data,
+          );
+        });
   }
 }

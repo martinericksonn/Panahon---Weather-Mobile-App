@@ -7,7 +7,7 @@ import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class WeatherController with ChangeNotifier {
+class WeatherController {
   late Weather currentWeather;
   late List<dynamic> hourlyWeather;
   late List<dynamic> dailyWeather;
@@ -17,22 +17,8 @@ class WeatherController with ChangeNotifier {
 
   void setCity(String city) {
     cityName = city;
-    // print(cityName);
-    notifyListeners();
+    // notifyListeners();
   }
-
-  // final Stream<int> _bids = (() {
-  //   late final StreamController<int> controller;
-  //   controller = StreamController<int>(
-  //     onListen: () async {
-  //       await Future<void>.delayed(const Duration(seconds: 1));
-  //       controller.add(1);
-  //       await Future<void>.delayed(const Duration(seconds: 1));
-  //       await controller.close();
-  //     },
-  //   );
-  //   return controller.stream;
-  // })();
 
   Stream<String> getWeather() {
     late final StreamController<String> controller;

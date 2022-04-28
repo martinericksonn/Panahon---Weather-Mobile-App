@@ -1,15 +1,29 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class ThemeController {
-  // ignore: prefer_typing_uninitialized_variables
-  var dateNow;
+class ThemeController with ChangeNotifier {
+  // ignore: prefer_typing_uninitialinuukzed_variables
+  late int dateNow;
+  late ThemeData weatherTheme;
+  final StreamController<ThemeData> _controller = StreamController();
+  Stream<ThemeData> get stream => _controller.stream;
+  void incrementNumber() {
+    _controller.add(_themeSelector(dateNow)); // ADD NEW EVENT TO THE STREAM
+  }
 
   ThemeController() {
     dateNow = DateTime.now().hour;
-    dateNow = 9;
+
+    setTimeNow(7);
+  }
+
+  void setTimeNow(int time) {
+    dateNow = time;
+    _controller.add(_themeSelector(dateNow));
   }
 
   Alignment backgroundShift() {
@@ -44,9 +58,7 @@ class ThemeController {
     }
   }
 
-  ThemeData themeSelector(context) {
-    // var dateNow = DateTime.now().hour;
-
+  ThemeData _themeSelector(dateNow) {
     if (dateNow > 18 || dateNow < 4) {
       return _nightTheme();
     } else if (dateNow > 15) {
@@ -59,6 +71,17 @@ class ThemeController {
     return ThemeData();
   }
 
+  Stream<String> themeChanger() {
+    late final StreamController<String> controller;
+    controller = StreamController<String>(onListen: () {
+      print(
+          "SOMEeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee CHANGEEEES");
+      weatherTheme = _themeSelector(dateNow);
+      controller.add("success");
+    });
+    return controller.stream;
+  }
+
   ThemeData _morningTheme() {
     return ThemeData(
       cardTheme: CardTheme(
@@ -67,7 +90,7 @@ class ThemeController {
         // color: Color.fromARGB(157, 165, 198, 223),
         color: Color.fromARGB(153, 226, 226, 226),
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         bodyText2: TextStyle(
           color: Color.fromARGB(255, 34, 34, 34),
         ),
