@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:panahon/src/weather_controller.dart';
+
+import '../../controllers/weather_controller.dart';
 
 class DailyWeather extends StatelessWidget {
   final WeatherController wc;

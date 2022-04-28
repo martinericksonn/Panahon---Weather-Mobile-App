@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:panahon/src/screen/search_screen.dart';
 import 'package:panahon/src/screen/widgets/app_footer.dart';
 import 'package:panahon/src/screen/widgets/current_weather.dart';
 import 'package:panahon/src/screen/widgets/dialy_weather.dart';
 import 'package:panahon/src/screen/widgets/micesllaneous_weather.dart';
-import 'package:panahon/src/theme_controller.dart';
-import 'package:panahon/src/weather_controller.dart';
+
+import '../controllers/theme_controller.dart';
+import '../controllers/weather_controller.dart';
 
 class Home extends StatefulWidget {
   final ThemeController themeController;
@@ -124,7 +126,11 @@ class _HomeState extends State<Home> {
     );
 
     if (cityName != null) {
-      setState(() {});
+      setState(() {
+        var date = int.parse(DateFormat(DateFormat.HOUR24)
+            .format(_weatherController.getPSTTime()));
+        _themeController.setTimeNow(date);
+      });
     }
   }
 

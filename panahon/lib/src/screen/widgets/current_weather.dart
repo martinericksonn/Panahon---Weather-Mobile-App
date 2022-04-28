@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:panahon/src/weather_controller.dart';
 
+import '../../controllers/weather_controller.dart';
 import 'hourly_weather.dart';
 
 class CurrentWeather extends StatelessWidget {
@@ -38,8 +38,7 @@ class CurrentWeather extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(DateFormat("E, MMM d  hh:mm aaa")
-                    .format(wc.currentWeather.date ?? DateTime.now())),
+                Text(DateFormat("E, MMM d  hh:mm aaa").format(wc.getPSTTime())),
               ],
             ),
           ),
@@ -111,6 +110,7 @@ class CurrentWeather extends StatelessWidget {
           HourlyWeather(
             wc: wc,
           ),
+          Text(DateFormat(DateFormat.HOUR24).format(wc.getPSTTime())),
           // Text(_currentWeather.weatherDescription.toString()),
         ],
       ),

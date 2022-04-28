@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-import '../../weather_controller.dart';
+import '../../controllers/weather_controller.dart';
 
 class MiscellaneousWeather extends StatelessWidget {
   final WeatherController wc;

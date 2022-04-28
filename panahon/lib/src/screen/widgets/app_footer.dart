@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppFooter extends StatelessWidget {
-  const AppFooter({Key? key}) : super(key: key);
+  AppFooter({Key? key}) : super(key: key);
+
+  // Timezone timezone = Timezone();
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class AppFooter extends StatelessWidget {
             "© Panahon 2022",
             style: Theme.of(context).textTheme.overline,
           ),
+          // Text()
         ],
       ),
     );

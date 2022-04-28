@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:panahon/src/theme_controller.dart';
-
-import '../weather_controller.dart';
+import '../controllers/theme_controller.dart';
+import '../controllers/weather_controller.dart';
 
 class SearchScreen extends StatelessWidget {
   final ThemeController themeController;
@@ -51,9 +48,9 @@ class SearchScreen extends StatelessWidget {
                 child: TextField(
                   autofocus: true,
                   onSubmitted: (_textEditingController) {
-                    Random random = Random();
-                    int randomNumber = random.nextInt(24);
-                    themeController.setTimeNow(randomNumber);
+                    // Random random = Random();
+                    // int randomNumber = random.nextInt(24);
+                    // themeController.setTimeNow(randomNumber);
 
                     weatherController.setCity(this._textEditingController.text);
                     Navigator.of(context).pop(this._textEditingController.text);

@@ -8,22 +8,18 @@ import 'dart:math';
 class ThemeController with ChangeNotifier {
   // ignore: prefer_typing_uninitialinuukzed_variables
   late int dateNow;
-  late ThemeData weatherTheme;
   final StreamController<ThemeData> _controller = StreamController();
+
   Stream<ThemeData> get stream => _controller.stream;
-  void incrementNumber() {
-    _controller.add(_themeSelector(dateNow)); // ADD NEW EVENT TO THE STREAM
-  }
 
   ThemeController() {
-    dateNow = DateTime.now().hour;
-
-    setTimeNow(7);
+    setTimeNow(DateTime.now().hour);
   }
 
   void setTimeNow(int time) {
     dateNow = time;
-    _controller.add(_themeSelector(dateNow));
+    _controller.add(_themeSelector());
+    notifyListeners();
   }
 
   Alignment backgroundShift() {
@@ -58,28 +54,18 @@ class ThemeController with ChangeNotifier {
     }
   }
 
-  ThemeData _themeSelector(dateNow) {
+  ThemeData _themeSelector() {
     if (dateNow > 18 || dateNow < 4) {
       return _nightTheme();
     } else if (dateNow > 15) {
       return _afternoonTheme();
     } else if (dateNow > 6) {
       return _morningTheme();
-    } else if (dateNow > 4) {
+    } else if (dateNow >= 4) {
       return _afternoonTheme();
     }
-    return ThemeData();
-  }
 
-  Stream<String> themeChanger() {
-    late final StreamController<String> controller;
-    controller = StreamController<String>(onListen: () {
-      print(
-          "SOMEeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee CHANGEEEES");
-      weatherTheme = _themeSelector(dateNow);
-      controller.add("success");
-    });
-    return controller.stream;
+    return ThemeData();
   }
 
   ThemeData _morningTheme() {

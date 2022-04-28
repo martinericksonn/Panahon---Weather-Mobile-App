@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:panahon/src/weather_controller.dart';
+
+import '../../controllers/weather_controller.dart';
 
 class HourlyWeather extends StatelessWidget {
   final WeatherController wc;
@@ -29,7 +30,7 @@ class HourlyWeather extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  wc.dateFormatHour(wc.hourlyWeather[index]['dt']),
+                  wc.dateFormatHourMeridiem(wc.hourlyWeather[index]['dt']),
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Image.network(

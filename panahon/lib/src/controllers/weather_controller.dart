@@ -1,26 +1,30 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-// import 'package:panahon/src/theme_controller.dart';
+
 import 'package:weather/weather.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
-class WeatherController {
+class WeatherController with ChangeNotifier {
   late Weather currentWeather;
   late List<dynamic> hourlyWeather;
   late List<dynamic> dailyWeather;
+  late String timeZone;
   late Map<String, dynamic> currentWeatherExtra;
   late String cityName = 'lapu-lapu city';
   final WeatherFactory _wf = WeatherFactory('dbefc4cc13f502139796b12c559d332d');
 
   void setCity(String city) {
     cityName = city;
-    // notifyListeners();
+    notifyListeners();
   }
 
   Stream<String> getWeather() {
+    tz.initializeTimeZones();
     late final StreamController<String> controller;
     controller = StreamController<String>(
       onListen: () async {
@@ -43,9 +47,12 @@ class WeatherController {
 
           if (response.statusCode == 200) {
             final jsonResponse = convert.jsonDecode(response.body);
+
             hourlyWeather = jsonResponse['hourly'];
             dailyWeather = jsonResponse['daily'];
             currentWeatherExtra = jsonResponse['current'];
+            timeZone = jsonResponse['timezone'];
+
             controller.add("success");
             return;
           } else {
@@ -82,7 +89,11 @@ class WeatherController {
     return temperature.toString().replaceAll(" Celsius", "°");
   }
 
-  String dateFormatHour(int timesamp) {
+  String dateFormatHour(DateTime date) {
+    return DateFormat(DateFormat.HOUR24).format(date).toString();
+  }
+
+  String dateFormatHourMeridiem(int timesamp) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(timesamp * 1000);
 
     return DateFormat("h aaa").format(date).toString();
@@ -100,5 +111,17 @@ class WeatherController {
     return DateFormat('hh:mm aaa').format(
       DateTime.fromMillisecondsSinceEpoch(timesamp * 1000),
     );
+  }
+
+  DateTime getPSTTime() {
+    try {
+      final DateTime now = DateTime.now();
+      final pacificTimeZone = tz.getLocation(timeZone);
+
+      return tz.TZDateTime.from(now, pacificTimeZone);
+    } catch (e) {
+      print(e);
+      return DateTime.now();
+    }
   }
 }
