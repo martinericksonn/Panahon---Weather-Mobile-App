@@ -33,10 +33,22 @@ class MiscellaneousWeather extends StatelessWidget {
                 wc.currentWeatherExtra['uvi'],
               ),
             ),
-            customTileList(WeatherIcons.sunrise, "Sunrise",
-                wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunrise'])),
-            customTileList(WeatherIcons.sunset, "Sunset",
-                wc.dateFormatTimeOfDay(wc.currentWeatherExtra['sunset'])),
+            customTileList(
+                WeatherIcons.sunrise,
+                "Sunrise",
+                wc.dateFormatTimeOfDay(
+                  wc.convertToCurrentTimeZone(
+                    wc.currentWeatherExtra['sunrise'],
+                  ),
+                )),
+            customTileList(
+                WeatherIcons.sunset,
+                "Sunset",
+                wc.dateFormatTimeOfDay(
+                  wc.convertToCurrentTimeZone(
+                    wc.currentWeatherExtra['sunset'],
+                  ),
+                )),
             customTileList(
               WeatherIcons.humidity,
               "Humidity",

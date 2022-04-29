@@ -30,7 +30,8 @@ class HourlyWeather extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  wc.dateFormatHourMeridiem(wc.hourlyWeather[index]['dt']),
+                  wc.dateFormatHourMeridiem(wc
+                      .convertToCurrentTimeZone(wc.hourlyWeather[index]['dt'])),
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Image.network(

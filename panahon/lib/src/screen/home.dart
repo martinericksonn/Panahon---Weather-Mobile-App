@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    _weatherController = WeatherController();
+    _weatherController = WeatherController(_themeController);
     super.initState();
   }
 
@@ -127,10 +127,10 @@ class _HomeState extends State<Home> {
 
     if (cityName != null) {
       setState(() {
-        var date = int.parse(DateFormat(DateFormat.HOUR24)
-            .format(_weatherController.getPSTTime()));
+        // var date = int.parse(DateFormat(DateFormat.HOUR24)
+        //     .format(_weatherController.getPSTTime()));
         _weatherController.setCity(cityName);
-        _themeController.setTimeNow(date);
+        // _themeController.setTimeNow(date);
       });
     }
   }

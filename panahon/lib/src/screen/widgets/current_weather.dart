@@ -110,7 +110,7 @@ class CurrentWeather extends StatelessWidget {
           HourlyWeather(
             wc: wc,
           ),
-          Text(DateFormat(DateFormat.HOUR24).format(wc.getPSTTime())),
+
           // Text(_currentWeather.weatherDescription.toString()),
         ],
       ),

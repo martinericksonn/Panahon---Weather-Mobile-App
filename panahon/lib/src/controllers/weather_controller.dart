@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panahon/src/controllers/theme_controller.dart';
 
@@ -18,67 +16,70 @@ class WeatherController {
   late List<dynamic> dailyWeather;
   late String timeZone;
   late Map<String, dynamic> currentWeatherExtra;
-  late String? cityName = 'lapu-lapu city';
+  late String cityName = 'lapu-lapu city';
   final key = '6994e452939894a4cf970d7fbafe71b8';
   late final WeatherFactory _wf;
 
   final StreamController<String?> _controller = StreamController();
   Stream<String?> get stream => _controller.stream;
 
-  WeatherController() {
-    // themeController = tc;
+  WeatherController(ThemeController tc) {
+    themeController = tc;
     _wf = WeatherFactory(key);
+    _setWeather();
   }
   void setCity(String city) {
     cityName = city;
-    getWeather();
+    _setWeather();
   }
 
-  void getWeather() async {
+  void _setWeather() async {
     _controller.add(null);
     tz.initializeTimeZones();
 
     try {
-      if (cityName == null) {
-        return;
-      }
-      print("IM BEING CALLED UPON!");
-      currentWeather = await _wf.currentWeatherByCityName(cityName ?? 'none');
-
-      final url = Uri.https(
-        'api.openweathermap.org',
-        'data/2.5/onecall',
-        {
-          'lat': currentWeather.latitude.toString(),
-          'lon': currentWeather.longitude.toString(),
-          'exclude': 'minutely',
-          'units': 'metric',
-          'appid': key,
-        },
-      );
-
-      final response = await http.get(url);
+      http.Response response = await apiRequest();
 
       if (response.statusCode == 200) {
-        final jsonResponse = convert.jsonDecode(response.body);
-
-        hourlyWeather = jsonResponse['hourly'];
-        dailyWeather = jsonResponse['daily'];
-        currentWeatherExtra = jsonResponse['current'];
-        timeZone = jsonResponse['timezone'];
-
-        // themeController.setTimeNow(getTimezoneHour());
-        cityName = null;
+        _setWeatherDetails(response);
         _controller.add("success");
-        return;
       } else {
         _controller.addError(Future.error(response.statusCode));
-        return;
       }
     } catch (e) {
       _controller.addError((e));
-      return;
     }
+  }
+
+  void _setWeatherDetails(http.Response response) {
+    final jsonResponse = convert.jsonDecode(response.body);
+
+    hourlyWeather = jsonResponse['hourly'];
+    dailyWeather = jsonResponse['daily'];
+    currentWeatherExtra = jsonResponse['current'];
+    timeZone = jsonResponse['timezone'];
+
+    int cityTimeZone = _getTimeZoneHour(timeZone);
+    themeController.setTimeNow((cityTimeZone));
+  }
+
+  Future<http.Response> apiRequest() async {
+    currentWeather = await _wf.currentWeatherByCityName(cityName);
+
+    final url = Uri.https(
+      'api.openweathermap.org',
+      'data/2.5/onecall',
+      {
+        'lat': currentWeather.latitude.toString(),
+        'lon': currentWeather.longitude.toString(),
+        'exclude': 'minutely',
+        'units': 'metric',
+        'appid': key,
+      },
+    );
+
+    final response = await http.get(url);
+    return response;
   }
 
   String simplifyUV(uv) {
@@ -105,12 +106,6 @@ class WeatherController {
     return DateFormat(DateFormat.HOUR24).format(date).toString();
   }
 
-  String dateFormatHourMeridiem(int timesamp) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timesamp * 1000);
-
-    return DateFormat("h aaa").format(date).toString();
-  }
-
   String dateFormatWeek(int timesamp, [int index = 0]) {
     return index == 0
         ? "Today"
@@ -119,9 +114,9 @@ class WeatherController {
             .toString();
   }
 
-  String dateFormatTimeOfDay(int timesamp) {
+  String dateFormatTimeOfDay(DateTime timeNow) {
     return DateFormat('hh:mm aaa').format(
-      DateTime.fromMillisecondsSinceEpoch(timesamp * 1000),
+      (timeNow),
     );
   }
 
@@ -129,14 +124,40 @@ class WeatherController {
     try {
       final DateTime now = DateTime.now();
       final pacificTimeZone = tz.getLocation(timeZone);
-
-      return tz.TZDateTime.from(now, pacificTimeZone);
+      var tzz = tz.TZDateTime.from(now, pacificTimeZone);
+      print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      print(tzz);
+      return tzz;
     } catch (e) {
       return DateTime.now();
     }
   }
 
-  int getTimezoneHour() {
+  int _getTimeZoneHour(timeZone) {
     return int.parse(DateFormat(DateFormat.HOUR24).format(getPSTTime()));
+  }
+
+  DateTime convertToCurrentTimeZone(int hourlyWeather) {
+    // var timesamp = hourlyWeather * 1000;
+    var date = DateTime.fromMillisecondsSinceEpoch(hourlyWeather * 1000);
+
+    try {
+      // final DateTime now = DateTime.now();
+      final pacificTimeZone = tz.getLocation(timeZone);
+      var dateNow = tz.TZDateTime.from(date, pacificTimeZone);
+      // DateTime(dateNow);
+      // print(" ${dateFormatHourMeridiem(dateNow.millisecondsSinceEpoch)}");
+      // print(" ${(dateNow)}");
+
+      // print(" ${}");
+      return dateNow;
+    } catch (e) {
+      // print("EROOOOOOOOOOOOOOOOOOOOOOOOOOOR $e");
+      return DateTime.now();
+    }
+  }
+
+  String dateFormatHourMeridiem(DateTime timeNow) {
+    return DateFormat("h aaa").format(timeNow);
   }
 }
