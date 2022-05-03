@@ -34,8 +34,13 @@ class _HomeState extends State<Home> {
   void initState() {
     _weatherController = WeatherController(_themeController);
     super.initState();
-    _weatherController
-        .setCity(_recentSearchController.searches.last ?? "Cebu City");
+    _weatherController.setCity(_recentSearchController.searches.last);
+    // try {
+    //   _weatherController
+    //       .setCity(_recentSearchController.searches.last ?? "Cebu City");
+    // } catch (e) {
+    //   _weatherController.setCity("Cebu City");
+    // }
   }
 
   @override

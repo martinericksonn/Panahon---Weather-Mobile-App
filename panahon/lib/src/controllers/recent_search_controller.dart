@@ -6,7 +6,8 @@ class RecentSearchController with ChangeNotifier {
   List searches = [];
 
   RecentSearchController() {
-    List results = searchCache.get('search-history', defaultValue: []);
+    List results =
+        searchCache.get('search-history', defaultValue: ["Cebu City"]);
     for (var result in results) {
       searches.add(result);
     }
