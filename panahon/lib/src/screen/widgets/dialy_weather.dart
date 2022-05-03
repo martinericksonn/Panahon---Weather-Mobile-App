@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/weather_controller.dart';
+import '../../model/string_extension.dart';
 
 class DailyWeather extends StatelessWidget {
   final WeatherController wc;
@@ -89,7 +90,8 @@ class DailyWeather extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Text(
                         wc.dailyWeather[index]["weather"][0]['description']
-                            .toString(),
+                            .toString()
+                            .capitalize(),
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../controllers/weather_controller.dart';
 import 'hourly_weather.dart';
+import '../../model/string_extension.dart';
 
 class CurrentWeather extends StatelessWidget {
   final WeatherController wc;
@@ -86,7 +87,9 @@ class CurrentWeather extends StatelessWidget {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Text(
-                          wc.currentWeather.weatherDescription.toString(),
+                          wc.currentWeather.weatherDescription
+                              .toString()
+                              .capitalize(),
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:panahon/src/controllers/recent_search_controller.dart';
 
 import 'package:panahon/src/screen/search_screen.dart';
 import 'package:panahon/src/screen/widgets/app_footer.dart';
@@ -24,6 +25,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final RecentSearchController _recentSearchController =
+      RecentSearchController();
   late final WeatherController _weatherController;
   ThemeController get _themeController => widget.themeController;
 
@@ -31,6 +34,8 @@ class _HomeState extends State<Home> {
   void initState() {
     _weatherController = WeatherController(_themeController);
     super.initState();
+    _weatherController
+        .setCity(_recentSearchController.searches.last ?? "Cebu City");
   }
 
   @override
@@ -77,37 +82,52 @@ class _HomeState extends State<Home> {
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());
                   case ConnectionState.none:
-                    return Center(child: Text("No Internet Connection"));
+                    return messageBox(
+                      context,
+                      "No Internet Connection",
+                      "try agian later",
+                    );
                   default:
-                    Center(child: Text("Something is wrong"));
+                    messageBox(
+                      context,
+                      "Something is wrong",
+                      "",
+                    );
                 }
 
-                if (!snapshot.hasData && snapshot.hasError) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.3,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '"${_weatherController.cityName}" not found',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        Text(
-                          'Try searching for a city name',
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (!snapshot.hasData) {
+                if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
+                } else if (!snapshot.hasData && snapshot.hasError) {
+                  return messageBox(
+                    context,
+                    '"${_weatherController.cityName}" not found',
+                    'Try searching for a city name',
+                  );
                 } else {
                   return weatherCards(context);
                 }
               },
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  SizedBox messageBox(BuildContext context, String title, String subtitle) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.3,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            subtitle,
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
         ],
       ),
@@ -141,7 +161,6 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // appHeadline(context),
             CurrentWeather(wc: _weatherController),
             DailyWeather(wc: _weatherController),
             MiscellaneousWeather(wc: _weatherController, context: context),

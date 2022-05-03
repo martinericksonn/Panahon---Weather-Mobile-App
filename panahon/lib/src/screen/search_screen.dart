@@ -40,7 +40,8 @@ class _SearchScreenState extends State<SearchScreen> {
             appBar: AppBar(
                 actions: [
                   IconButton(
-                    onPressed: () => setCity(context, _textEditingController),
+                    onPressed: () => setCity(context,
+                        textEditingController: _textEditingController),
                     icon: Icon(
                       Icons.search,
                       color: Theme.of(context).primaryColor,
@@ -54,7 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: TextField(
                     autofocus: true,
                     onSubmitted: (_textEditingController) {
-                      setCity(context, this._textEditingController);
+                      setCity(context,
+                          textEditingController: this._textEditingController);
                       // Random random = Random();
                       // int randomNumber = random.nextInt(24);
                       // themeController.setTimeNow(randomNumber);
@@ -74,8 +76,10 @@ class _SearchScreenState extends State<SearchScreen> {
               itemCount: recentSearchController.searches.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  onTap: () =>
-                      setCity(context, recentSearchController.searches[index]),
+                  onTap: () {
+                    setCity(context,
+                        city: recentSearchController.searches[index]);
+                  },
                   title: Row(
                     children: [
                       const SizedBox(width: 10),
@@ -102,9 +106,21 @@ class _SearchScreenState extends State<SearchScreen> {
     ));
   }
 
-  void setCity(
-      BuildContext context, TextEditingController textEditingController) {
-    recentSearchController.add(textEditingController.text);
-    Navigator.of(context).pop(textEditingController.text);
+  void setCity(BuildContext context,
+      {String? city, TextEditingController? textEditingController}) {
+    if (textEditingController != null) {
+      if (textEditingController.text.trim() == '') {
+        return;
+      }
+
+      recentSearchController.add(textEditingController.text.trim());
+      Navigator.of(context).pop(textEditingController.text.trim());
+      return;
+    }
+
+    if (city?.trim() == '') {
+      return;
+    }
+    Navigator.of(context).pop(city?.trim());
   }
 }

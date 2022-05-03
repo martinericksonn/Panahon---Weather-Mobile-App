@@ -16,7 +16,7 @@ class WeatherController {
   late List<dynamic> dailyWeather;
   late String timeZone;
   late Map<String, dynamic> currentWeatherExtra;
-  late String cityName = 'lapu-lapu city';
+  late String cityName;
   final key = '6994e452939894a4cf970d7fbafe71b8';
   late final WeatherFactory _wf;
 
