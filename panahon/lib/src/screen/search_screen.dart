@@ -40,10 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
             appBar: AppBar(
                 actions: [
                   IconButton(
-                    onPressed: () {
-                      setCity(context, _textEditingController);
-                      // print(_textEditingController.value.toString());
-                    },
+                    onPressed: () => setCity(context, _textEditingController),
                     icon: Icon(
                       Icons.search,
                       color: Theme.of(context).primaryColor,
@@ -72,9 +69,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 )),
             body: ListView.builder(
+              reverse: true,
+              shrinkWrap: true,
               itemCount: recentSearchController.searches.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  onTap: () =>
+                      setCity(context, recentSearchController.searches[index]),
                   title: Row(
                     children: [
                       const SizedBox(width: 10),
@@ -85,11 +86,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                   trailing: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          recentSearchController.remove(index);
-                        });
-                      },
+                      onPressed: () => setState(() {
+                            recentSearchController.remove(index);
+                          }),
                       icon: Icon(
                         Icons.close,
                         color: Theme.of(context).primaryColor,
