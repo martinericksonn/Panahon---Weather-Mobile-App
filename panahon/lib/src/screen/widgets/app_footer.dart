@@ -19,7 +19,6 @@ class AppFooter extends StatelessWidget {
             "Martin Erickson Lapetaje | BSCS - 3",
             style: Theme.of(context).textTheme.overline,
           ),
-
           Text(
             "© Panahon 2022",
             style: Theme.of(context).textTheme.overline,
