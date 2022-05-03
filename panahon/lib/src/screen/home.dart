@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:panahon/src/screen/search_screen.dart';
 import 'package:panahon/src/screen/widgets/app_footer.dart';
 import 'package:panahon/src/screen/widgets/current_weather.dart';

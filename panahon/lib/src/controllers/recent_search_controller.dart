@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:panahon/src/controllers/recent_search_model.dart';
-import 'package:panahon/src/screen/search_screen.dart';
 
 class RecentSearchController with ChangeNotifier {
   final Box searchCache = Hive.box('search-history');

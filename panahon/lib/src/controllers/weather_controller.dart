@@ -125,8 +125,8 @@ class WeatherController {
       final DateTime now = DateTime.now();
       final pacificTimeZone = tz.getLocation(timeZone);
       var tzz = tz.TZDateTime.from(now, pacificTimeZone);
-      print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-      print(tzz);
+      // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      // print(tzz);
       return tzz;
     } catch (e) {
       return DateTime.now();

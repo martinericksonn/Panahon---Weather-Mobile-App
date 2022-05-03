@@ -1,5 +1,3 @@
-import 'package:hive/hive.dart';
-
 class RecentSearch {
   late String lat;
   late String long;

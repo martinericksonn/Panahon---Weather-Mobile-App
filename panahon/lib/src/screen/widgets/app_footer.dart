@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppFooter extends StatelessWidget {
-  AppFooter({Key? key}) : super(key: key);
+  const AppFooter({Key? key}) : super(key: key);
 
   // Timezone timezone = Timezone();
 
