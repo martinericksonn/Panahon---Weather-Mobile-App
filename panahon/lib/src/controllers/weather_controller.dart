@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
+import 'package:panahon/src/controllers/recent_search_controller.dart';
 import 'package:panahon/src/controllers/theme_controller.dart';
 
 import 'package:weather/weather.dart';
@@ -10,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class WeatherController {
+  final RecentSearchController _rsc = RecentSearchController();
   late final ThemeController themeController;
   late Weather currentWeather;
   late List<dynamic> hourlyWeather;
@@ -24,9 +26,11 @@ class WeatherController {
   Stream<String?> get stream => _controller.stream;
 
   WeatherController(ThemeController tc) {
-    themeController = tc;
     _wf = WeatherFactory(key);
-    _setWeather();
+    setCity(_rsc.searches.isEmpty ? "Cebu City" : _rsc.searches.last);
+    cityName = "Cebu City";
+    themeController = tc;
+    // _setWeather();
   }
   void setCity(String city) {
     cityName = city;
@@ -44,9 +48,11 @@ class WeatherController {
         _setWeatherDetails(response);
         _controller.add("success");
       } else {
+        print(response.statusCode);
         _controller.addError(Future.error(response.statusCode));
       }
     } catch (e) {
+      print(e);
       _controller.addError((e));
     }
   }

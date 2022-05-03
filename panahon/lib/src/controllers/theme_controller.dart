@@ -115,7 +115,7 @@ class ThemeController {
       primaryColor: Colors.black,
       colorScheme: ColorScheme.fromSwatch().copyWith(
         tertiary: Color(0xff7CB1FF), // Your accent color
-        secondary: Colors.red,
+        secondary: Color(0xff7CB1FF), // Your accent color,
       ),
     );
   }

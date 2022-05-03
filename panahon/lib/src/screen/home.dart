@@ -33,14 +33,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _weatherController = WeatherController(_themeController);
+
     super.initState();
-    _weatherController.setCity(_recentSearchController.searches.last);
-    // try {
-    //   _weatherController
-    //       .setCity(_recentSearchController.searches.last ?? "Cebu City");
-    // } catch (e) {
-    //   _weatherController.setCity("Cebu City");
-    // }
   }
 
   @override
@@ -100,14 +94,14 @@ class _HomeState extends State<Home> {
                     );
                 }
 
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (!snapshot.hasData && snapshot.hasError) {
+                if (snapshot.hasError) {
                   return messageBox(
                     context,
                     '"${_weatherController.cityName}" not found',
                     'Try searching for a city name',
                   );
+                } else if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
                 } else {
                   return weatherCards(context);
                 }

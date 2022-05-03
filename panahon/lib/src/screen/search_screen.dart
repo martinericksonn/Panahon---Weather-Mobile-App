@@ -18,8 +18,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final RecentSearchController recentSearchController =
-      RecentSearchController();
+  final RecentSearchController _rsc = RecentSearchController();
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -73,25 +72,27 @@ class _SearchScreenState extends State<SearchScreen> {
             body: ListView.builder(
               reverse: true,
               shrinkWrap: true,
-              itemCount: recentSearchController.searches.length,
+              itemCount: _rsc.searches.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    setCity(context,
-                        city: recentSearchController.searches[index]);
+                    setCity(context, city: _rsc.searches[index]);
+                    var temp = _rsc.searches[index];
+                    _rsc.searches.removeAt(index);
+                    _rsc.add(temp);
                   },
                   title: Row(
                     children: [
                       const SizedBox(width: 10),
                       Text(
-                        recentSearchController.searches[index],
+                        _rsc.searches[index],
                         style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ],
                   ),
                   trailing: IconButton(
                       onPressed: () => setState(() {
-                            recentSearchController.remove(index);
+                            _rsc.remove(index);
                           }),
                       icon: Icon(
                         Icons.close,
@@ -113,7 +114,7 @@ class _SearchScreenState extends State<SearchScreen> {
         return;
       }
 
-      recentSearchController.add(textEditingController.text.trim());
+      _rsc.add(textEditingController.text.trim());
       Navigator.of(context).pop(textEditingController.text.trim());
       return;
     }
