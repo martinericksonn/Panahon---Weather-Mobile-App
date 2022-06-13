@@ -12,7 +12,8 @@
 - Recent city searched will be set as the default city
 - Dynamic background (Morning, Evening, and Afternoon)
 - Miscellaneous weather information (Sunset, Sunrise, UV light, etc)
-
+ 
+Download APK: https://github.com/martinericksonn/Panahon---Weather-Mobile-App/releases/tag/v1.0.0 
 API: https://openweathermap.org/api
 
 |       App Preview       |
