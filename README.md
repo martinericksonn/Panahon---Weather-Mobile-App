@@ -14,7 +14,6 @@
 - Miscellaneous weather information (Sunset, Sunrise, UV light, etc)
  
 Download APK: https://github.com/martinericksonn/Panahon---Weather-Mobile-App/releases/tag/v1.0.0 
-API: https://openweathermap.org/api
 
 |       App Preview       |
 | :---------------------: |
